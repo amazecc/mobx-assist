@@ -1,0 +1,62 @@
+{
+    "name": "mobx-assist",
+    "version": "0.0.0",
+    "description": "mobx-assist",
+    "main": "lib/index.js",
+    "types": "lib/index.d.ts",
+    "scripts": {
+        "start": "webpack-dev-server --config config/webpack.config.dev.ts",
+        "build": "rm -rf lib && tsc -p config/tsconfig.build.json && babel lib --out-dir lib",
+        "check": "ts-node script/check.ts",
+        "release:patch": "npm version patch && npm publish && git push origin master --follow-tags",
+        "release:minor": "npm version minor && npm publish && git push origin master --follow-tags",
+        "release:major": "npm version major && npm publish && git push origin master --follow-tags"
+    },
+    "keywords": [
+        "mobx",
+        "mobx-assist",
+        "mobx-helper"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/amazecc/mobx-assist"
+    },
+    "author": "Alex",
+    "license": "MIT",
+    "sideEffects": false,
+    "devDependencies": {
+        "@babel/cli": "7.6.0",
+        "@babel/core": "7.6.0",
+        "@babel/plugin-proposal-class-properties": "7.5.5",
+        "@babel/plugin-proposal-decorators": "7.6.0",
+        "@babel/plugin-transform-typescript": "7.6.0",
+        "@babel/polyfill": "7.6.0",
+        "@babel/preset-env": "7.6.0",
+        "@babel/preset-react": "7.0.0",
+        "@types/html-webpack-plugin": "3.2.1",
+        "@types/node": "12.7.5",
+        "@types/react": "16.9.2",
+        "@types/react-dom": "16.9.1",
+        "@types/webpack": "4.39.1",
+        "@types/webpack-dev-server": "3.1.7",
+        "babel-loader": "8.0.6",
+        "colors": "1.4.0",
+        "core-js": "3.2.1",
+        "html-webpack-plugin": "3.2.0",
+        "mobx-react": "6.1.3",
+        "prettier": "1.18.2",
+        "react": "16.9.0",
+        "react-dom": "16.9.0",
+        "ts-node": "8.4.1",
+        "tslint": "5.20.0",
+        "tslint-config-prettier": "1.18.0",
+        "tslint-react": "4.1.0",
+        "typescript": "3.6.3",
+        "webpack": "4.40.2",
+        "webpack-cli": "3.3.9",
+        "webpack-dev-server": "3.8.1"
+    },
+    "dependencies": {
+        "mobx": "5.13.0"
+    }
+}
