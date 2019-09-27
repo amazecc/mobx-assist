@@ -1,8 +1,9 @@
-import { Module, loading, delay, register } from "../../../src";
+import { Module, loading, register, delay } from "../../../src";
 import { RootState } from "../../type";
 import { State } from "./type";
 
 const initialState: State = {
+    num: 0,
     list: [],
     loading: false,
 
@@ -14,15 +15,16 @@ const initialState: State = {
 class TodoList extends Module<State, RootState> {
     a = 0;
 
-    @loading<State>("loading")
     async push() {
-        await delay(1000);
         this.state.list.push(this.a++);
         await this.error();
         console.log("==> 错误下一行");
     }
 
-    add() {
+    @loading<State>("loading")
+    async add() {
+        await delay(1000);
+        this.state.num = ++this.state.num;
         console.log("==> rootState", this.rootState);
     }
 

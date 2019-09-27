@@ -8,14 +8,18 @@ export class TodoList extends React.Component {
     render() {
         return (
             <div>
-                <button onClick={() => TodoListModule.push()}>修改</button>
-                <button onClick={() => TodoListModule.add()}>打印 root state</button>
+                <button onClick={() => TodoListModule.resetState()}>重置所有</button>
+                <button onClick={() => TodoListModule.resetState(["num"])}>重置排除 num</button>
+                <button onClick={() => TodoListModule.resetState(["list"])}>重置排除 list</button>
+                <button onClick={TodoListModule.push}>修改 list</button>
+                <button onClick={TodoListModule.add}> 递增 num</button>
                 <hr />
-                {JSON.stringify(TodoListModule.store, null, 4)}
-                {TodoListModule.store.listLength}
+                <pre>{JSON.stringify(TodoListModule.store, null, 4)}</pre>
+                listLenght: {TodoListModule.store.listLength}
                 <hr />
+                rootState: <br />
                 <button onClick={() => RootModule.add()}>添加</button>
-                rootState <br />a {RootModule.store.a} <br />b {RootModule.store.b}
+                <br />a {RootModule.store.a} <br />b {RootModule.store.b}
             </div>
         );
     }

@@ -1,10 +1,17 @@
-import { set, observable } from "mobx";
+import { set, observable, toJS } from "mobx";
 import { config } from "../utils/config";
 
-export class Module<S extends object, R extends object = {}, G extends object = {}> {
+interface AnyObject {
+    [k: string]: any;
+}
+
+export class Module<S extends AnyObject, R extends AnyObject = {}, G extends AnyObject = {}> {
+    private initialState: S;
+
     public readonly store: Readonly<S>;
 
-    constructor(private readonly initialState: S) {
+    constructor(initialState: S) {
+        this.initialState = { ...initialState };
         this.store = observable(initialState);
     }
 
@@ -13,18 +20,28 @@ export class Module<S extends object, R extends object = {}, G extends object = 
     }
 
     public resetState(skipFields?: Array<keyof S>) {
-        let finalState: S;
+        let finalState: Partial<S>;
+        // toJS 生成除去 getter（计算属性）的对象
+        const omitComputedFieldsState = toJS(this.store);
+        const keys = Object.keys(omitComputedFieldsState);
         if (skipFields && skipFields.length > 0) {
-            const skipFieldsState = skipFields.reduce(
+            finalState = keys
+                .filter(_ => !skipFields.includes(_))
+                .reduce(
+                    (prev, next) => {
+                        prev[next] = this.initialState[next];
+                        return prev;
+                    },
+                    {} as any
+                );
+        } else {
+            finalState = keys.reduce(
                 (prev, next) => {
-                    prev[next] = this.store[next];
+                    prev[next] = this.initialState[next];
                     return prev;
                 },
-                {} as Partial<S>
+                {} as any
             );
-            finalState = { ...this.initialState, ...skipFieldsState };
-        } else {
-            finalState = this.initialState;
         }
         set(this.store, finalState);
     }
