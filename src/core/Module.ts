@@ -7,18 +7,15 @@ interface AnyObject {
     [k: string]: any;
 }
 
-export class Module<S extends AnyObject, R extends AnyObject = {}> {
-    private readonly moduleName: string;
-
+export class Module<S extends AnyObject, G extends AnyObject = {}> {
     private readonly initialState: S;
 
     public readonly store: Readonly<S>;
 
     constructor(moduleName: string, initialState: S) {
-        this.moduleName = moduleName;
         this.initialState = { ...initialState };
         this.store = observable(initialState);
-        stores.add({ [this.moduleName]: this.store });
+        stores.add({ [moduleName]: this.store });
     }
 
     protected setState(value: Partial<S>) {
@@ -57,6 +54,6 @@ export class Module<S extends AnyObject, R extends AnyObject = {}> {
     }
 
     protected get globalState() {
-        return stores.get<R>();
+        return stores.get<{ [K in keyof G]: Readonly<G[K]> }>();
     }
 }
