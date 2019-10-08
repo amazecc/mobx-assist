@@ -1,4 +1,4 @@
-export interface RootState {
+export interface CommonState {
     a: number;
     b: number;
 }

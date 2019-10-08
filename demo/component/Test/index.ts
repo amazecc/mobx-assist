@@ -1,6 +1,6 @@
 import { Module, loading, register, delay } from "../../../src";
-import { RootState } from "../../type";
 import { State } from "./type";
+import { GlobalState } from "demo/globalStateType";
 
 const initialState: State = {
     num: 0,
@@ -12,7 +12,7 @@ const initialState: State = {
     }
 };
 
-class TodoList extends Module<State, RootState> {
+class TodoList extends Module<State, GlobalState> {
     a = 0;
 
     async push() {
@@ -25,7 +25,7 @@ class TodoList extends Module<State, RootState> {
     async add() {
         await delay(1000);
         this.state.num = ++this.state.num;
-        console.log("==> rootState", this.rootState);
+        console.log("==> rootState", this.globalState.Common.a);
     }
 
     async error() {
@@ -33,4 +33,4 @@ class TodoList extends Module<State, RootState> {
     }
 }
 
-export const TodoListModule = register(new TodoList(initialState));
+export const TodoListModule = register(new TodoList("TodoList", initialState));

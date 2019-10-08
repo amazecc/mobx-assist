@@ -2,7 +2,6 @@ import { isDevelopment } from "./common";
 
 interface Config {
     errorHandler: (error: any) => void;
-    rootStore: object;
 }
 
 export const config: Config = {
@@ -12,8 +11,7 @@ export const config: Config = {
         } else {
             throw error;
         }
-    },
-    rootStore: {}
+    }
 };
 
 export const initialConfig = (options: Config) => Object.assign(config, options);

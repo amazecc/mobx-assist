@@ -1,18 +1,24 @@
 import { set, observable, toJS } from "mobx";
-import { config } from "../utils/config";
+import { Stores } from "./Stores";
+
+const stores = new Stores();
 
 interface AnyObject {
     [k: string]: any;
 }
 
-export class Module<S extends AnyObject, R extends AnyObject = {}, G extends AnyObject = {}> {
-    private initialState: S;
+export class Module<S extends AnyObject, R extends AnyObject = {}> {
+    private readonly moduleName: string;
+
+    private readonly initialState: S;
 
     public readonly store: Readonly<S>;
 
-    constructor(initialState: S) {
+    constructor(moduleName: string, initialState: S) {
+        this.moduleName = moduleName;
         this.initialState = { ...initialState };
         this.store = observable(initialState);
+        stores.add({ [this.moduleName]: this.store });
     }
 
     protected setState(value: Partial<S>) {
@@ -50,12 +56,7 @@ export class Module<S extends AnyObject, R extends AnyObject = {}, G extends Any
         return this.store as S;
     }
 
-    protected get rootState() {
-        return config.rootStore as Readonly<R>;
-    }
-
     protected get globalState() {
-        // TODO: 获取全局共享 store
-        return (null as unknown) as G;
+        return stores.get<R>();
     }
 }

@@ -1,7 +1,7 @@
 import { Module, register } from "../src";
-import { RootState } from "./type";
+import { CommonState } from "./type";
 
-const initialState: RootState = {
+const initialState: CommonState = {
     a: 1,
 
     get b() {
@@ -9,10 +9,10 @@ const initialState: RootState = {
     }
 };
 
-class Root extends Module<RootState> {
+class Common extends Module<CommonState> {
     async add() {
         this.state.a = ++this.state.a;
     }
 }
 
-export const RootModule = register(new Root(initialState));
+export const RootModule = register(new Common("Common", initialState));
