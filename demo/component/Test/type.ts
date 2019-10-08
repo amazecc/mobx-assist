@@ -1,5 +1,5 @@
 export interface State {
-    num: number
+    num: number;
     list: number[];
     loading: boolean;
 

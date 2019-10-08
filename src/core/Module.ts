@@ -7,21 +7,25 @@ interface AnyObject {
     [k: string]: any;
 }
 
+type DeepReadonly<T> = {
+    readonly [K in keyof T]: DeepReadonly<T[K]>;
+};
+
 export class Module<S extends AnyObject, G extends AnyObject = {}> {
     private readonly initialState: S;
 
-    public readonly state: S;
+    public readonly state: DeepReadonly<S>;
 
     constructor(moduleName: string, initialState: S) {
         this.initialState = { ...initialState };
-        this.state = observable(initialState);
+        this.state = observable(initialState as any);
         stores.add(moduleName, this.state);
     }
 
     protected setState(value: Partial<S> | ((state: S) => void), actionName?: string) {
         const fn =
             typeof value === "function"
-                ? () => value(this.state)
+                ? () => value((this.state as unknown) as S)
                 : () => {
                       Object.keys(value).forEach(_ => ((this.state as AnyObject)[_] = value[_]));
                   };
@@ -60,6 +64,6 @@ export class Module<S extends AnyObject, G extends AnyObject = {}> {
     }
 
     protected get globalState() {
-        return stores.get<{ [K in keyof G]: Readonly<G[K]> }>();
+        return stores.get<DeepReadonly<G>>();
     }
 }
