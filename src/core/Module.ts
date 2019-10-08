@@ -1,4 +1,4 @@
-import { set, observable, toJS } from "mobx";
+import { observable, toJS, action } from "mobx";
 import { Stores } from "./Stores";
 
 const stores = new Stores();
@@ -10,22 +10,32 @@ interface AnyObject {
 export class Module<S extends AnyObject, G extends AnyObject = {}> {
     private readonly initialState: S;
 
-    public readonly store: Readonly<S>;
+    public readonly state: S;
 
     constructor(moduleName: string, initialState: S) {
         this.initialState = { ...initialState };
-        this.store = observable(initialState);
-        stores.add({ [moduleName]: this.store });
+        this.state = observable(initialState);
+        stores.add(moduleName, this.state);
     }
 
-    protected setState(value: Partial<S>) {
-        set(this.store, value);
+    protected setState(value: Partial<S> | ((state: S) => void), actionName?: string) {
+        const fn =
+            typeof value === "function"
+                ? () => value(this.state)
+                : () => {
+                      Object.keys(value).forEach(_ => ((this.state as AnyObject)[_] = value[_]));
+                  };
+        if (actionName) {
+            action(actionName, fn)();
+        } else {
+            action(fn)();
+        }
     }
 
     public resetState(skipFields?: Array<keyof S>) {
         let finalState: Partial<S>;
-        // toJS 生成除去 getter（计算属性）的对象
-        const omitComputedFieldsState = toJS(this.store);
+        // toJS create object that remove computed fields
+        const omitComputedFieldsState = toJS(this.state);
         const keys = Object.keys(omitComputedFieldsState);
         if (skipFields && skipFields.length > 0) {
             finalState = keys
@@ -46,11 +56,7 @@ export class Module<S extends AnyObject, G extends AnyObject = {}> {
                 {} as any
             );
         }
-        set(this.store, finalState);
-    }
-
-    protected get state() {
-        return this.store as S;
+        this.setState(finalState, "reset state");
     }
 
     protected get globalState() {

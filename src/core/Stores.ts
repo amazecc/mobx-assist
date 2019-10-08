@@ -1,8 +1,8 @@
 export class Stores {
     private stores: object = {};
 
-    add(store: object) {
-        Object.assign(this.stores, store);
+    add(name: string, store: object) {
+        this.stores[name] = store;
     }
 
     get<S>() {

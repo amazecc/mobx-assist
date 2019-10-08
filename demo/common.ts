@@ -11,8 +11,10 @@ const initialState: CommonState = {
 
 class Common extends Module<CommonState> {
     async add() {
-        this.state.a = ++this.state.a;
+        this.setState(state => {
+            state.a = ++state.a;
+        });
     }
 }
 
-export const RootModule = register(new Common("Common", initialState));
+export const CommonModule = register(new Common("Common", initialState));

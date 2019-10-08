@@ -16,7 +16,7 @@ class TodoList extends Module<State, GlobalState> {
     a = 0;
 
     async push() {
-        this.state.list.push(this.a++);
+        this.setState(state => state.list.push(++this.a), "push list");
         await this.error();
         console.log("==> 错误下一行");
     }
@@ -24,7 +24,8 @@ class TodoList extends Module<State, GlobalState> {
     @loading<State>("loading")
     async add() {
         await delay(1000);
-        this.state.num = ++this.state.num;
+        const { num } = this.state;
+        this.setState({ num: num + 1 }, "add num");
         console.log("==> rootState", this.globalState.Common.a);
     }
 

@@ -1,4 +1,3 @@
-import { set } from "mobx";
 import { Module } from "../core/Module";
 
 type AsyncFunction = (...args: any[]) => Promise<any>;
@@ -27,16 +26,14 @@ export const decoratorCreator = (intercept: (f: NormalFunction) => void) => {
     };
 };
 
-// TODO: TC39 new decorator
-
 // ******************************************************************************
 export function loading<T>(field: keyof T) {
     return asyncDecoratorCreator(async function(this: Module<any>, fn) {
         try {
-            set(this.store, { [field]: true });
+            (this as any).setState({ [field]: true }, `loading field update: ${field}`);
             return await fn();
         } finally {
-            set(this.store, { [field]: false });
+            (this as any).setState({ [field]: false }, `loading field update: ${field}`);
         }
     });
 }
