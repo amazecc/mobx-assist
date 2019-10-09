@@ -3,22 +3,14 @@ import { Stores } from "./Stores";
 
 const stores = new Stores();
 
-interface AnyObject {
-    [k: string]: any;
-}
-
-type DeepReadonly<T> = {
-    readonly [K in keyof T]: DeepReadonly<T[K]>;
-};
-
-export class Module<S extends AnyObject, G extends AnyObject = {}> {
+export class Module<S extends object, G extends object = {}> {
     private readonly initialState: S;
 
-    public readonly state: DeepReadonly<S>;
+    public readonly state: S;
 
     constructor(moduleName: string, initialState: S) {
         this.initialState = { ...initialState };
-        this.state = observable(initialState as any);
+        this.state = observable(initialState);
         stores.add(moduleName, this.state);
     }
 
@@ -27,7 +19,7 @@ export class Module<S extends AnyObject, G extends AnyObject = {}> {
             typeof value === "function"
                 ? () => value((this.state as unknown) as S)
                 : () => {
-                      Object.keys(value).forEach(_ => ((this.state as AnyObject)[_] = value[_]));
+                      Object.keys(value).forEach(_ => (this.state[_] = value[_]));
                   };
         if (actionName) {
             action(actionName, fn)();
@@ -36,14 +28,14 @@ export class Module<S extends AnyObject, G extends AnyObject = {}> {
         }
     }
 
-    public resetState(skipFields?: Array<keyof S>) {
+    public resetState(skipFields?: Array<keyof S>, actionName?: string) {
         let finalState: Partial<S>;
         // toJS create object that remove computed fields
         const omitComputedFieldsState = toJS(this.state);
         const keys = Object.keys(omitComputedFieldsState);
         if (skipFields && skipFields.length > 0) {
             finalState = keys
-                .filter(_ => !skipFields.includes(_))
+                .filter(_ => !((skipFields as unknown) as string[]).includes(_))
                 .reduce(
                     (prev, next) => {
                         prev[next] = this.initialState[next];
@@ -60,10 +52,10 @@ export class Module<S extends AnyObject, G extends AnyObject = {}> {
                 {} as any
             );
         }
-        this.setState(finalState, "reset state");
+        this.setState(finalState, actionName || "reset state");
     }
 
     protected get globalState() {
-        return stores.get<DeepReadonly<G>>();
+        return stores.get<{ [K in keyof G]: Readonly<G[K]> }>();
     }
 }
