@@ -8,9 +8,9 @@ export class Module<S extends object, G extends object = {}> {
 
     public readonly state: S;
 
-    constructor(moduleName: string, initialState: S) {
+    constructor(private readonly moduleName: string, initialState: S) {
         this.initialState = { ...initialState };
-        this.state = observable(initialState);
+        this.state = observable(initialState, undefined, { name: moduleName });
         stores.add(moduleName, this.state);
     }
 
@@ -28,31 +28,15 @@ export class Module<S extends object, G extends object = {}> {
         }
     }
 
-    public resetState(skipFields?: Array<keyof S>, actionName?: string) {
-        let finalState: Partial<S>;
-        // toJS create object that remove computed fields
-        const omitComputedFieldsState = toJS(this.state);
-        const keys = Object.keys(omitComputedFieldsState);
-        if (skipFields && skipFields.length > 0) {
-            finalState = keys
-                .filter(_ => !((skipFields as unknown) as string[]).includes(_))
-                .reduce(
-                    (prev, next) => {
-                        prev[next] = this.initialState[next];
-                        return prev;
-                    },
-                    {} as any
-                );
-        } else {
-            finalState = keys.reduce(
-                (prev, next) => {
-                    prev[next] = this.initialState[next];
-                    return prev;
-                },
-                {} as any
-            );
-        }
-        this.setState(finalState, actionName || "reset state");
+    public resetState(skipFields: Array<keyof S> = [], actionName?: string) {
+        // 获取除去计算属性的 key
+        const omitComputedFieldsStateKeys = Object.keys(toJS(this.state));
+        const keys = skipFields && skipFields.length > 0 ? omitComputedFieldsStateKeys.filter(_ => !((skipFields as unknown) as string[]).includes(_)) : omitComputedFieldsStateKeys;
+        const finalState: Partial<S> = keys.reduce((prev, next) => {
+            prev[next] = this.initialState[next];
+            return prev;
+        }, {});
+        this.setState(finalState, actionName || `reset ${this.moduleName} state, skip fields: ${JSON.stringify(skipFields)}`);
     }
 
     protected get globalState() {
