@@ -8,9 +8,15 @@ export class Module<S extends object, G extends object = {}> {
 
     public readonly state: S;
 
-    constructor(private readonly moduleName: string, initialState: S) {
-        this.initialState = { ...initialState };
-        this.state = observable(initialState, undefined, { name: moduleName });
+    constructor(private readonly moduleName: string, initialState: S | (new () => S)) {
+        if (typeof initialState === "object") {
+            this.initialState = { ...initialState };
+            this.state = observable(initialState, undefined, { name: moduleName });
+        } else {
+            const store = new initialState();
+            this.initialState = toJS(store);
+            this.state = store;
+        }
         stores.add(moduleName, this.state);
     }
 

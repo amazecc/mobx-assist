@@ -2,7 +2,7 @@ import { config } from "../utils/config";
 import { proxy } from "./proxy";
 import { Module } from "./Module";
 
-export function register<T extends Module<any>>(obj: T): T & { _pure_: T } {
+export function exceptionIntercept<T extends Module<any>>(obj: T): T & { _pure_: T } {
     // Set proxy capture exception
     const { before: pureActions, after: actions } = proxy(obj, function(this: T, value) {
         if (value instanceof Function) {

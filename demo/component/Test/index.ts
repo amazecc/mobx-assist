@@ -1,16 +1,6 @@
-import { Module, loading, register, delay } from "../../../src";
-import { State } from "./type";
+import { Module, loading, delay, exceptionIntercept } from "../../../src";
 import { GlobalState } from "demo/globalStateType";
-
-const initialState: State = {
-    num: 0,
-    list: [],
-    loading: false,
-
-    get listLength() {
-        return this.list.length;
-    }
-};
+import { State } from "./state";
 
 class TodoList extends Module<State, GlobalState> {
     a = 0;
@@ -34,4 +24,4 @@ class TodoList extends Module<State, GlobalState> {
     }
 }
 
-export const TodoListModule = register(new TodoList("TodoList", initialState));
+export const TodoListModule = exceptionIntercept(new TodoList("TodoList", State));
