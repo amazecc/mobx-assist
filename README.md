@@ -13,10 +13,35 @@
 
 类：提供操作模块数据的方法
 
-- **constructor(moduleName: string, initialState: object)**
+- **constructor(moduleName: string, initialState: object | (new () => object))**
 
 	- moduleName: 模块名
-	- initialState: 初始状态值
+	- initialState: 初始状态值或者一个类
+	
+		当 `initialState` 传入的是对象，使用 `observable()` 方法创建 `store`，传入的是类，则通过 `new initialState()` 的方式创建 `store`
+	
+		```js
+		const initialState: State = {
+		    a: 1,
+		
+		    get b() {
+		        return this.a * this.a;
+		    }
+		};
+		
+		// or
+		
+		import { observable, computed } from "mobx";
+	
+		export class State {
+		    @observable num: number = 0;
+		    @observable list: number[] = [];
+		    @observable loading: boolean = false;
+		    @computed get listLength() {
+		        return this.list.length;
+		    }
+		}
+		```
 
 - **state**
 

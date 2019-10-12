@@ -23,7 +23,7 @@ export class Module<S extends object, G extends object = {}> {
     protected setState(value: Partial<S> | ((state: S) => void), actionName?: string) {
         const fn =
             typeof value === "function"
-                ? () => value((this.state as unknown) as S)
+                ? () => value(this.state)
                 : () => {
                       Object.keys(value).forEach(_ => (this.state[_] = value[_]));
                   };
@@ -35,7 +35,6 @@ export class Module<S extends object, G extends object = {}> {
     }
 
     public resetState(skipFields: Array<keyof S> = [], actionName?: string) {
-        // 获取除去计算属性的 key
         const omitComputedFieldsStateKeys = Object.keys(toJS(this.state));
         const keys = skipFields && skipFields.length > 0 ? omitComputedFieldsStateKeys.filter(_ => !((skipFields as unknown) as string[]).includes(_)) : omitComputedFieldsStateKeys;
         const finalState: Partial<S> = keys.reduce((prev, next) => {
