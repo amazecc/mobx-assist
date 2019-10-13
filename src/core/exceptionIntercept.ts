@@ -3,9 +3,14 @@ import { proxy } from "./proxy";
 import { Module } from "./Module";
 import { PickType } from "src/type";
 
-type PureActions<T> = PickType<T, () => void>;
+interface PureActions<T> {
+    /**
+     * Used in other modules, does not contain exception catchers
+     */
+    _pure_: PickType<T, () => void>;
+}
 
-export function exceptionIntercept<T extends Module<any>>(obj: T): T & { _pure_: PureActions<T> } {
+export function exceptionIntercept<T extends Module<any>>(obj: T): T & PureActions<T> {
     // Set proxy capture exception
     const { before: pureActions, after: actions } = proxy(obj, function(this: T, value) {
         if (value instanceof Function) {

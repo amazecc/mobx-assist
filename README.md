@@ -85,7 +85,7 @@
 
 #### exceptionIntercept
 
-方法：(module: T) => T & { \_pure\_: PureActions<T> }
+方法：(module: T) => T & PureActions<T>
 
 提供异常捕获程序，捕获所有 Module 子类方法的异常信息
 
