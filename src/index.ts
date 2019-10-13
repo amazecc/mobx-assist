@@ -3,3 +3,6 @@ export { loading, asyncDecoratorCreator, decoratorCreator } from "./utils/decora
 export { delay } from "./utils/common";
 export { exceptionIntercept } from "./core/exceptionIntercept";
 export { initialConfig } from "./utils/config";
+
+// export type utils
+export * from "./type";
