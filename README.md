@@ -83,9 +83,9 @@
 	const {name, age} = this.globalState.Common; // 获取 Common 模块 store中的数据	
 	```
 
-#### register
+#### exceptionIntercept
 
-方法：(module: T) => T & { \_pure\_: T }
+方法：(module: T) => T & { \_pure\_: PureActions<T> }
 
 提供异常捕获程序，捕获所有 Module 子类方法的异常信息
 
