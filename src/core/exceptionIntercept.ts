@@ -7,7 +7,7 @@ interface PureActions<T> {
     /**
      * Used in other modules, does not contain exception catchers
      */
-    _pure_: PickType<T, () => void>;
+    _pure_: PickType<T, (...args: any[]) => void>;
 }
 
 export function exceptionIntercept<T extends Module<any>>(obj: T): T & PureActions<T> {
