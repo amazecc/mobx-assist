@@ -4,20 +4,23 @@ import { Stores } from "./Stores";
 const stores = new Stores();
 
 export class Module<S extends object, G extends object = {}> {
+    private readonly moduleName: string;
+
     private readonly initialState: S;
 
     public readonly state: S;
 
-    constructor(private readonly moduleName: string, initialState: S | (new () => S)) {
+    constructor(initialState: S | (new () => S)) {
+        this.moduleName = this.constructor.name;
         if (typeof initialState === "object") {
             this.initialState = { ...initialState };
-            this.state = observable(initialState, undefined, { name: moduleName });
+            this.state = observable(initialState, undefined, { name: this.moduleName });
         } else {
             const store = new initialState();
             this.initialState = toJS(store);
             this.state = store;
         }
-        stores.add(moduleName, this.state);
+        stores.add(this.moduleName, this.state);
     }
 
     protected setState<K extends keyof S>(value: Pick<S, K> | ((state: S) => void), actionName?: string) {

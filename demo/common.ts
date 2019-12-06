@@ -17,4 +17,4 @@ class Common extends Module<CommonState> {
     }
 }
 
-export const CommonModule = exceptionIntercept(new Common("Common", initialState));
+export const CommonModule = exceptionIntercept(new Common(initialState));

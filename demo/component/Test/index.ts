@@ -24,4 +24,4 @@ class TodoList extends Module<State, GlobalState> {
     }
 }
 
-export const TodoListModule = exceptionIntercept(new TodoList("TodoList", State));
+export const TodoListModule = exceptionIntercept(new TodoList(State));
