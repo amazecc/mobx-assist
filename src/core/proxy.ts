@@ -19,7 +19,10 @@ const proxyHandler: ProxyHandler = (obj, callback) => {
             if (key !== "_pure_" && key in target) {
                 exceptionUtil.catch(createError({ target, key: key as string, value }));
             }
-            return Reflect.set(target, key, value, receiver);
+            if (key === "_pure_") {
+                return Reflect.set(target, key, value, receiver);
+            }
+            return false;
         }
     });
     return {
@@ -49,7 +52,7 @@ const definePropertyHandler: ProxyHandler = (obj, callback) => {
     Object.keys(after).forEach(key => {
         Object.defineProperty(after, key, {
             get() {
-                return obj[key];
+                return callback.call(obj, obj[key]);
             },
             set(value) {
                 exceptionUtil.catch(createError({ target: obj, key: key as string, value }));
