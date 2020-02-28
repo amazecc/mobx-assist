@@ -32,7 +32,7 @@ export class Module<S extends object, G extends object = {}> {
         }
     }
 
-    public resetState(skipFields: Array<keyof S> = [], actionName?: string) {
+    public resetState(skipFields: (keyof S)[] = [], actionName?: string) {
         const omitComputedFieldsStateKeys = Object.keys(toJS(this.state));
         const keys = skipFields && skipFields.length > 0 ? omitComputedFieldsStateKeys.filter(_ => !((skipFields as unknown) as string[]).includes(_)) : omitComputedFieldsStateKeys;
         const finalState = keys.reduce((prev, next) => {
