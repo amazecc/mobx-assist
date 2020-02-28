@@ -1,6 +1,6 @@
 import { exceptionUtil } from "../utils/exceptionUtil";
 
-type ProxyHandler = <T extends any>(obj: T, callback: (value: any) => T[keyof T]) => { before: T; after: T };
+type ProxyHandler = <T extends object>(obj: T, callback: (value: any) => T[keyof T]) => { before: T; after: T };
 
 const createError = (errorInfo: { target: any; key: string; value: any }) => {
     return {
@@ -9,7 +9,26 @@ const createError = (errorInfo: { target: any; key: string; value: any }) => {
     };
 };
 
-export const proxy: ProxyHandler = (obj, callback) => {
+const proxyHandler: ProxyHandler = (obj, callback) => {
+    const after = new Proxy(obj, {
+        get(target, key) {
+            return callback.call(target, target[key as string]);
+        },
+        set(target, key, value, receiver) {
+            // _pure_ created in file register.ts
+            if (key !== "_pure_" && key in target) {
+                exceptionUtil.catch(createError({ target, key: key as string, value }));
+            }
+            return Reflect.set(target, key, value, receiver);
+        }
+    });
+    return {
+        before: obj,
+        after
+    };
+};
+
+const definePropertyHandler: ProxyHandler = (obj, callback) => {
     const after = { ...obj } as typeof obj;
     const prototype = Object.getPrototypeOf(obj);
     Object.setPrototypeOf(after, prototype);
@@ -42,3 +61,5 @@ export const proxy: ProxyHandler = (obj, callback) => {
         after
     };
 };
+
+export const proxy = Proxy ? proxyHandler : definePropertyHandler;

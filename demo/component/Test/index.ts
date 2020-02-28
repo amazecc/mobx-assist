@@ -7,7 +7,6 @@ class TodoList extends Module<State, GlobalState> {
 
     async push() {
         this.setState(state => state.list.push(++this.a), "push list");
-        console.log("==> 错误下一行");
     }
 
     @loading<State>("loading")
