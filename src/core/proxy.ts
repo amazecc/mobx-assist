@@ -1,4 +1,4 @@
-import { config } from "../utils/config";
+import { exceptionUtil } from "../utils/exceptionUtil";
 
 type ProxyHandler = <T extends any>(obj: T, callback: (value: any) => T[keyof T]) => { before: T; after: T };
 
@@ -21,7 +21,7 @@ export const proxy: ProxyHandler = (obj, callback) => {
                     return callback.call(obj, obj[key]);
                 },
                 set(value) {
-                    config.errorHandler(createError({ target: obj, key: key as string, value }));
+                    exceptionUtil.catch(createError({ target: obj, key: key as string, value }));
                 }
             });
         }
@@ -33,7 +33,7 @@ export const proxy: ProxyHandler = (obj, callback) => {
                 return obj[key];
             },
             set(value) {
-                config.errorHandler(createError({ target: obj, key: key as string, value }));
+                exceptionUtil.catch(createError({ target: obj, key: key as string, value }));
             }
         });
     });

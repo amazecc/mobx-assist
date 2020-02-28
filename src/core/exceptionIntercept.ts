@@ -1,4 +1,4 @@
-import { config } from "../utils/config";
+import { exceptionUtil } from "../utils/exceptionUtil";
 import { proxy } from "./proxy";
 import { Module } from "./Module";
 import { PickType } from "src/type";
@@ -18,7 +18,7 @@ export function exceptionIntercept<T extends Module<any>>(obj: T): T & PureActio
                 try {
                     return await value.apply(this, args);
                 } catch (error) {
-                    config.errorHandler(error);
+                    exceptionUtil.catch(error);
                 }
             };
         } else {

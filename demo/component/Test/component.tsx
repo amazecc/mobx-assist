@@ -13,6 +13,7 @@ export class TodoList extends React.Component {
                 <button onClick={() => TodoListModule.resetState(["list"])}>重置排除 list</button>
                 <button onClick={TodoListModule.push}>修改 list</button>
                 <button onClick={TodoListModule.add}> 递增 num</button>
+                <button onClick={TodoListModule.error}> 触发 error</button>
                 <hr />
                 <pre>{JSON.stringify(TodoListModule.state, null, 4)}</pre>
                 listLength: {TodoListModule.state.listLength}
