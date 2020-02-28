@@ -7,7 +7,7 @@ interface PureActions<T> {
     /**
      * Used in other modules, does not contain exception catchers
      */
-    _pure_: PickType<T, (...args: any[]) => void>;
+    readonly _pure_: PickType<T, (...args: any[]) => void>;
 }
 
 export function register<T extends Module<any>>(obj: T): T & PureActions<T> {
