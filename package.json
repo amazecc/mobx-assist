@@ -58,5 +58,8 @@
     },
     "dependencies": {
         "mobx": "5.15.4"
+    },
+    "peerDependencies": {
+        "react": "16.13.0"
     }
 }

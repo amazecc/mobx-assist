@@ -1,7 +1,5 @@
 import { observable, toJS, action } from "mobx";
-import { Stores } from "./Stores";
-
-const stores = new Stores();
+import { store } from "./store";
 
 export class Module<S extends object, G extends object = {}> {
     private readonly moduleName: string;
@@ -20,7 +18,7 @@ export class Module<S extends object, G extends object = {}> {
             this.initialState = toJS(store);
             this.state = store;
         }
-        stores.add(this.moduleName, this.state);
+        store.add(this.moduleName, this.state);
     }
 
     protected setState<K extends keyof S>(value: Pick<S, K> | ((state: S) => void), actionName?: string) {
@@ -43,6 +41,6 @@ export class Module<S extends object, G extends object = {}> {
     }
 
     protected get globalState() {
-        return stores.get<{ [K in keyof G]: Readonly<G[K]> }>();
+        return store.get<{ [K in keyof G]: Readonly<G[K]> }>();
     }
 }

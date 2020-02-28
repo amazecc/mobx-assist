@@ -1,4 +1,4 @@
-export class Stores {
+export class Store {
     private store: object = Object.create(null);
 
     add(name: string, store: object) {
@@ -9,3 +9,5 @@ export class Stores {
         return (this.store as unknown) as Readonly<S>;
     }
 }
+
+export const store = new Store();

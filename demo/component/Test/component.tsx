@@ -1,7 +1,9 @@
-import * as React from "react";
+import React from "react";
 import { observer } from "mobx-react";
+import { useStore } from "../../../src";
 import { TodoListModule } from "./index";
 import { CommonModule } from "../../common";
+import { GlobalState } from "demo/globalStateType";
 
 @observer
 export class TodoList extends React.Component {
@@ -20,8 +22,16 @@ export class TodoList extends React.Component {
                 <hr />
                 rootState: <br />
                 <button onClick={() => CommonModule.add()}>添加</button>
-                <br />a {CommonModule.state.a} <br />b {CommonModule.state.b}
+                <br />a {CommonModule.state.a} <br />b {CommonModule.state.b} <br />
+                <hr />
+                <div>以下通过 hook 获取 store 的值</div>
+                <FunctionComponentDemo />
             </div>
         );
     }
 }
+
+const FunctionComponentDemo: React.FC = observer(() => {
+    const data = useStore((state: GlobalState) => state);
+    return <pre>{JSON.stringify(data, null, 4)}</pre>;
+});
