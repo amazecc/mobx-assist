@@ -1,4 +1,4 @@
-import { Module, exceptionIntercept } from "../src";
+import { Module, register } from "../src";
 import { CommonState } from "./type";
 
 const initialState: CommonState = {
@@ -17,4 +17,4 @@ class Common extends Module<CommonState> {
     }
 }
 
-export const CommonModule = exceptionIntercept(new Common(initialState));
+export const CommonModule = register(new Common(initialState));

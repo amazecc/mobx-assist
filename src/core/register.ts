@@ -10,7 +10,7 @@ interface PureActions<T> {
     _pure_: PickType<T, (...args: any[]) => void>;
 }
 
-export function exceptionIntercept<T extends Module<any>>(obj: T): T & PureActions<T> {
+export function register<T extends Module<any>>(obj: T): T & PureActions<T> {
     // Set proxy capture exception
     const { before: pureActions, after: actions } = proxy(obj, function(this: T, value) {
         if (value instanceof Function) {

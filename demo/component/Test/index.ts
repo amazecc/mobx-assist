@@ -1,4 +1,4 @@
-import { Module, loading, delay, exceptionIntercept } from "../../../src";
+import { Module, loading, delay, register } from "../../../src";
 import { GlobalState } from "demo/globalStateType";
 import { State } from "./state";
 
@@ -22,4 +22,4 @@ class TodoList extends Module<State, GlobalState> {
     }
 }
 
-export const TodoListModule = exceptionIntercept(new TodoList(State));
+export const TodoListModule = register(new TodoList(State));
