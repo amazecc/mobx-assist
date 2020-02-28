@@ -17,4 +17,5 @@ class Common extends Module<CommonState> {
     }
 }
 
-export const CommonModule = register(new Common(initialState));
+export const module = register(new Common(initialState));
+export const commonModule = module.getModule();

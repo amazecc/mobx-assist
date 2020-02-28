@@ -1,7 +1,7 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { configure } from "mobx";
-import { TodoList } from "./component/Test/component";
+import { TodoListDemoComponent } from "./component/Test";
 import { exceptionUtil, Provider } from "../src";
 
 configure({ enforceActions: "observed" });
@@ -14,7 +14,7 @@ exceptionUtil.setErrorHandlerMethod(errorHandler);
 
 ReactDOM.render(
     <Provider>
-        <TodoList />
+        <TodoListDemoComponent a={1} />
     </Provider>,
     document.getElementById("root")
 );

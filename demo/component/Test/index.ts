@@ -1,9 +1,22 @@
 import { Module, loading, delay, register } from "../../../src";
 import { GlobalState } from "demo/globalStateType";
 import { State } from "./state";
+import { TodoListDemo } from "./component";
 
 class TodoList extends Module<State, GlobalState> {
     a = 0;
+
+    componentDidMount() {
+        console.log("组件加载");
+    }
+
+    componentDidHide() {}
+
+    componentDidShow() {}
+
+    componentWillMount() {}
+
+    componentWillUnmount() {}
 
     async push() {
         this.setState(state => state.list.push(++this.a), "push list");
@@ -22,4 +35,6 @@ class TodoList extends Module<State, GlobalState> {
     }
 }
 
-export const TodoListModule = register(new TodoList(State));
+const module = register(new TodoList(State));
+export const todoListModule = module.getModule();
+export const TodoListDemoComponent = module.attachLifecycle(TodoListDemo);

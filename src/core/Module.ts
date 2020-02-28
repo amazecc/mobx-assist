@@ -1,6 +1,14 @@
 import { observable, toJS, action } from "mobx";
 import { store } from "./store";
 
+export interface Module<S extends object, G extends object = {}> {
+    componentWillMount?(): void;
+    componentDidMount?(): void;
+    componentWillUnmount?(): void;
+    componentDidShow?(): void;
+    componentDidHide?(): void;
+}
+
 export class Module<S extends object, G extends object = {}> {
     private readonly moduleName: string;
 
