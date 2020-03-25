@@ -1,9 +1,9 @@
 import React from "react";
-import { PureActions } from "./register";
+import { PureModule } from "./register";
 import { Module } from "./Module";
 
 export class ModuleProxy<T extends Module<any, any>> {
-    constructor(private readonly module: T & PureActions<T>) {}
+    constructor(private readonly module: T & PureModule<T>) {}
 
     getModule() {
         return this.module;

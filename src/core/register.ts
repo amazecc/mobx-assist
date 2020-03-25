@@ -1,10 +1,9 @@
 import { exceptionUtil } from "../utils/exceptionUtil";
-import { proxy } from "./proxy";
 import { Module } from "./Module";
 import { PickType } from "src/type";
 import { ModuleProxy } from "./ModuleProxy";
 
-export interface PureActions<T> {
+export interface PureModule<T> {
     /**
      * Used in other modules, does not contain exception catchers
      */
@@ -13,18 +12,20 @@ export interface PureActions<T> {
 
 export function register<T extends Module<any>>(obj: T) {
     // Set proxy capture exception
-    const { before: pureActions, after: actions } = proxy(obj, function(this: T, value) {
-        if (value instanceof Function) {
-            return async (...args: any[]) => {
-                try {
-                    return await value.apply(this, args);
-                } catch (error) {
-                    exceptionUtil.catch(error);
-                }
-            };
-        } else {
-            return value;
+    const proxyModule = new Proxy(obj, {
+        get(target: T, p: string, receiver: any) {
+            if (target[p] instanceof Function) {
+                return async (...args: any[]) => {
+                    try {
+                        return await target[p].apply(obj, args);
+                    } catch (error) {
+                        exceptionUtil.catch(error);
+                    }
+                };
+            } else {
+                return Reflect.get(target, p, receiver);
+            }
         }
     });
-    return new ModuleProxy<T>(Object.assign(actions, { _pure_: pureActions }));
+    return new ModuleProxy<T>(Object.assign(proxyModule, { _pure_: obj }));
 }
