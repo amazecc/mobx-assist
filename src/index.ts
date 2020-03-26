@@ -5,6 +5,7 @@ export { loading, asyncDecoratorCreator, decoratorCreator } from "./utils/decora
 export { delay } from "./utils/common";
 export { exceptionUtil } from "./utils/exceptionUtil";
 export { Store } from "./core/StoreManager";
+export { connect } from "./component/connect";
 
 // export type utils
 export * from "./type";

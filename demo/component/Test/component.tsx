@@ -3,6 +3,7 @@ import { observer } from "mobx-react";
 import { useStore, Store } from "../../../src";
 import { todoListModule } from "./index";
 import { commonModule } from "../../common";
+import { Demo, Demo2 } from "./Demo";
 
 interface TodoListDemoProps {
     a: number;
@@ -29,6 +30,11 @@ export class TodoListDemo extends React.Component<TodoListDemoProps> {
                 <hr />
                 <div>以下通过 hook 获取 store 的值</div>
                 <FunctionComponentDemo />
+                <hr />
+                以下通过高阶函数 connect 拿到数据 num：
+                <br />
+                <Demo text="demo" />
+                <Demo2 text="demo2" />
             </div>
         );
     }

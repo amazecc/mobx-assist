@@ -16,3 +16,6 @@ export type OmitType<T, P> = Pick<T, OmitTypeFields<T, P>>;
 
 // 获取可选字段
 export type PickOptional<T> = Pick<T, { [K in keyof T]-?: {} extends { [P in K]: T[K] } ? K : never }[keyof T]>;
+
+// 适用于编写高阶组件
+export type Subtract<T1, T2> = Omit<T1, keyof T2>;
