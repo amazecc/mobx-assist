@@ -1,5 +1,7 @@
 import { observable, observe, IObjectDidChange, runInAction } from "mobx";
 
+// TODO: refactor
+
 class ExceptionUtil {
     @observable.shallow private exception: { info: any[] } = {
         info: []

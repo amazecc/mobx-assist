@@ -28,7 +28,7 @@ export const decoratorCreator = (intercept: (f: NormalFunction) => void) => {
 
 // ******************************************************************************
 export function loading<T>(field: keyof T) {
-    return asyncDecoratorCreator(async function(this: Module<any>, fn) {
+    return asyncDecoratorCreator(async function(this: Module, fn) {
         try {
             (this as any).setState({ [field]: true }, `loading field update: ${field}`);
             return await fn();

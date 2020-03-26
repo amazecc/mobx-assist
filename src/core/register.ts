@@ -10,7 +10,7 @@ export interface PureModule<T> {
     readonly _pure_: PickType<T, (...args: any[]) => void>;
 }
 
-export function register<T extends Module<any>>(obj: T) {
+export function register<T extends Module>(obj: T) {
     // Set proxy capture exception
     const proxyModule = new Proxy(obj, {
         get(target: T, p: string, receiver: any) {
