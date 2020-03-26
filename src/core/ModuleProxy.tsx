@@ -2,7 +2,7 @@ import React from "react";
 import { PureModule } from "./register";
 import { Module } from "./Module";
 
-export class ModuleProxy<T extends Module<any, any>> {
+export class ModuleProxy<T extends Module> {
     constructor(private readonly module: T & PureModule<T>) {}
 
     getModule() {
@@ -10,7 +10,7 @@ export class ModuleProxy<T extends Module<any, any>> {
     }
 
     attachLifecycle<P extends {}>(Component: React.ComponentType<P>): React.ComponentType<P> {
-        const module = (this.module._pure_ as unknown) as Module<any>;
+        const module = (this.module._pure_ as unknown) as Module;
         return class extends React.PureComponent<P> {
             componentWillMount() {
                 module.componentWillMount?.();

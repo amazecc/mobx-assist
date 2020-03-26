@@ -1,9 +1,8 @@
 import { Module, loading, delay, register } from "../../../src";
-import { GlobalState } from "demo/globalStateType";
 import { State } from "./state";
 import { TodoListDemo } from "./component";
 
-class TodoList extends Module<State, GlobalState> {
+class TodoList extends Module<State> {
     a = 0;
 
     componentDidMount() {

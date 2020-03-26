@@ -1,7 +1,7 @@
 import { observable, toJS, action } from "mobx";
-import { store } from "./store";
+import { storeManager } from "./StoreManager";
 
-export interface Module<S extends object, G extends object = {}> {
+export interface Module<S extends AnyState = AnyState> {
     componentWillMount?(): void;
     componentDidMount?(): void;
     componentWillUnmount?(): void;
@@ -9,7 +9,11 @@ export interface Module<S extends object, G extends object = {}> {
     componentDidHide?(): void;
 }
 
-export class Module<S extends object, G extends object = {}> {
+interface AnyState {
+    [k: string]: any;
+}
+
+export class Module<S extends AnyState = AnyState> {
     private readonly moduleName: string;
 
     private readonly initialState: S;
@@ -26,11 +30,11 @@ export class Module<S extends object, G extends object = {}> {
             this.initialState = toJS(store);
             this.state = store;
         }
-        store.add(this.moduleName, this.state);
+        storeManager.add(this.moduleName, this.state);
     }
 
     protected setState<K extends keyof S>(value: Pick<S, K> | ((state: S) => void), actionName?: string) {
-        const fn = typeof value === "function" ? () => value(this.state) : () => Object.keys(value).forEach(_ => (this.state[_] = value[_]));
+        const fn = typeof value === "function" ? () => value(this.state) : () => Object.keys(value).forEach(_ => (this.state[_ as keyof S] = value[_]));
         if (actionName) {
             action(actionName, fn)();
         } else {
@@ -49,6 +53,6 @@ export class Module<S extends object, G extends object = {}> {
     }
 
     protected get globalState() {
-        return store.get<{ [K in keyof G]: Readonly<G[K]> }>();
+        return storeManager.get();
     }
 }

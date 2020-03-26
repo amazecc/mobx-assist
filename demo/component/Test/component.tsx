@@ -1,9 +1,8 @@
 import React from "react";
 import { observer } from "mobx-react";
-import { useStore } from "../../../src";
+import { useStore, Store } from "../../../src";
 import { todoListModule } from "./index";
 import { commonModule } from "../../common";
-import { GlobalState } from "demo/globalStateType";
 
 interface TodoListDemoProps {
     a: number;
@@ -36,6 +35,6 @@ export class TodoListDemo extends React.Component<TodoListDemoProps> {
 }
 
 const FunctionComponentDemo: React.FC = observer(() => {
-    const data = useStore((state: GlobalState) => state);
+    const data = useStore((state: Store) => state);
     return <pre>{JSON.stringify(data, null, 4)}</pre>;
 });
