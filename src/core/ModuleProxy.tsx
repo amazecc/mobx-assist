@@ -21,7 +21,10 @@ export class ModuleProxy<T extends Module> {
             }
 
             componentWillUnmount() {
-                module.componentWillUnmount?.();
+                const ignoreKeys = module.componentWillUnmount?.();
+                if (ignoreKeys) {
+                    module.resetState(ignoreKeys);
+                }
             }
 
             componentDidShow() {

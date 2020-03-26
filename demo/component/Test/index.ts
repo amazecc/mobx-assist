@@ -15,7 +15,9 @@ class TodoList extends Module<State> {
 
     componentWillMount() {}
 
-    componentWillUnmount() {}
+    componentWillUnmount() {
+        return ['loading' as const];
+    }
 
     async push() {
         this.setState(state => state.list.push(++this.a), "push list");
