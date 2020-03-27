@@ -9,12 +9,14 @@ const config: webpack.Configuration = {
     output: {
         path: path.resolve(__dirname, "../dist"),
         chunkFilename: "js/[name].[hash:5].js",
-        filename: "js/[name].[hash:5].js"
+        filename: "js/[name].[hash:5].js",
+        publicPath: '/'
     },
     devServer: {
         open: true,
         disableHostCheck: true,
-        port: 8081
+        port: 8081,
+        historyApiFallback: true
     },
     resolve: {
         extensions: [".ts", ".tsx", ".js", ".jsx", "json"]

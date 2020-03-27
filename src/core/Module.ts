@@ -1,8 +1,13 @@
 import { observable, toJS, action } from "mobx";
+import { RouteComponentProps } from "react-router-dom";
 import { storeManager } from "./StoreManager";
 
+export interface RouteInfo<Query = {}, Params = {}, State = {}> extends RouteComponentProps<Params, any, State> {
+    query: Query;
+}
+
 export interface Module<S extends AnyState = AnyState> {
-    componentDidMount?(): void;
+    componentDidMount?<Params = {}, Query = {}, State = {}>(routeInfo: RouteInfo<Query, Params, State>): void;
     /**
      * 组件卸载默认清除当前模块的数据，若要忽略一些数据，可返回一个数组，数组每项为当前模块 state key
      */

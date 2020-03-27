@@ -1,6 +1,6 @@
 import React from "react";
 import { observer } from "mobx-react";
-import { useStore, Store } from "../../../src";
+import { useStore } from "../../../src";
 import { todoListModule } from "./index";
 import { commonModule } from "../../common";
 import { Demo, Demo2 } from "./Demo";

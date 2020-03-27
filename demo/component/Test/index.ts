@@ -1,16 +1,16 @@
-import { Module, loading, delay, register } from "../../../src";
+import { Module, loading, delay, register, RouteInfo } from "../../../src";
 import { State } from "./state";
 import { TodoListDemo } from "./component";
 
 class TodoList extends Module<State> {
     a = 0;
 
-    componentDidMount() {
-        console.log("组件加载");
+    componentDidMount(info: RouteInfo) {
+        console.log("组件加载", info);
     }
 
     componentWillUnmount() {
-        return ['loading' as const];
+        return ["loading" as const];
     }
 
     async push() {

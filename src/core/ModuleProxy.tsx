@@ -1,4 +1,5 @@
 import React from "react";
+import { RouteComponentProps } from "react-router-dom";
 import { PureModule } from "./register";
 import { Module } from "./Module";
 
@@ -13,7 +14,9 @@ export class ModuleProxy<T extends Module> {
         const module = (this.module._pure_ as unknown) as Module;
         return class extends React.PureComponent<P> {
             componentDidMount() {
-                module.componentDidMount?.();
+                const props = (this.props as unknown) as RouteComponentProps;
+                // TODO: 计算query
+                module.componentDidMount?.({ ...props, query: {} });
             }
 
             componentWillUnmount() {
