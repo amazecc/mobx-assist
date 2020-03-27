@@ -41,6 +41,6 @@ export class TodoListDemo extends React.Component<TodoListDemoProps> {
 }
 
 const FunctionComponentDemo: React.FC = observer(() => {
-    const data = useStore((state: Store) => state);
+    const data = useStore(state => state);
     return <pre>{JSON.stringify(data, null, 4)}</pre>;
 });
