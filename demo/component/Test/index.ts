@@ -9,12 +9,6 @@ class TodoList extends Module<State> {
         console.log("组件加载");
     }
 
-    componentDidHide() {}
-
-    componentDidShow() {}
-
-    componentWillMount() {}
-
     componentWillUnmount() {
         return ['loading' as const];
     }

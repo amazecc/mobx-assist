@@ -12,10 +12,6 @@ export class ModuleProxy<T extends Module> {
     attachLifecycle<P extends {}>(Component: React.ComponentType<P>): React.ComponentType<P> {
         const module = (this.module._pure_ as unknown) as Module;
         return class extends React.PureComponent<P> {
-            componentWillMount() {
-                module.componentWillMount?.();
-            }
-
             componentDidMount() {
                 module.componentDidMount?.();
             }
@@ -25,14 +21,6 @@ export class ModuleProxy<T extends Module> {
                 if (ignoreKeys) {
                     module.resetState(ignoreKeys);
                 }
-            }
-
-            componentDidShow() {
-                module.componentDidShow?.();
-            }
-
-            componentDidHide() {
-                module.componentDidHide?.();
             }
 
             render() {

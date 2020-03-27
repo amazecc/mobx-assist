@@ -2,14 +2,11 @@ import { observable, toJS, action } from "mobx";
 import { storeManager } from "./StoreManager";
 
 export interface Module<S extends AnyState = AnyState> {
-    componentWillMount?(): void;
     componentDidMount?(): void;
     /**
      * 组件卸载默认清除当前模块的数据，若要忽略一些数据，可返回一个数组，数组每项为当前模块 state key
      */
     componentWillUnmount?(): void | (keyof S)[];
-    componentDidShow?(): void;
-    componentDidHide?(): void;
 }
 
 interface AnyState {
