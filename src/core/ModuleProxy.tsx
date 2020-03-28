@@ -15,8 +15,7 @@ export class ModuleProxy<T extends Module> {
         return class extends React.PureComponent<P> {
             componentDidMount() {
                 const props = (this.props as unknown) as RouteComponentProps;
-                // TODO: 计算query
-                module.componentDidMount?.({ ...props, query: {} });
+                module.componentDidMount?.({ ...props, query: this.getQuery(props.location.search) });
             }
 
             componentWillUnmount() {
@@ -24,6 +23,20 @@ export class ModuleProxy<T extends Module> {
                 if (ignoreKeys) {
                     module.resetState(ignoreKeys);
                 }
+            }
+
+            getQuery(search: string) {
+                return search
+                    .slice(1)
+                    .split("&")
+                    .filter(Boolean)
+                    .map(_ => _.split("="))
+                    .reduce((prev, next) => {
+                        if (next) {
+                            prev[next[0]] = next[1] || "";
+                        }
+                        return prev;
+                    }, {});
             }
 
             render() {
