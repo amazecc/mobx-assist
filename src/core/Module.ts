@@ -1,8 +1,9 @@
 import { observable, toJS, action } from "mobx";
 import { RouteComponentProps } from "react-router-dom";
+import { LocationState } from "history";
 import { storeManager } from "./StoreManager";
 
-export interface RouteInfo<Query = {}, Params = {}, State = {}> extends RouteComponentProps<Params, any, State> {
+export interface RouteInfo<Query = {}, Params = {}, State = LocationState> extends RouteComponentProps<Params, any, State> {
     query: Query;
 }
 
