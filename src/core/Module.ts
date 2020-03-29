@@ -7,7 +7,7 @@ export interface RouteInfo<Query = {}, Params = {}, State = {}> extends RouteCom
 }
 
 export interface Module<S extends AnyState = AnyState> {
-    componentDidMount?<Params = {}, Query = {}, State = {}>(routeInfo: RouteInfo<Query, Params, State>): void;
+    componentDidMount?(routeInfo: RouteInfo): void;
     /**
      * 组件卸载默认清除当前模块的数据，若要忽略一些数据，可返回一个数组，数组每项为当前模块 state key
      */

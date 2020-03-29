@@ -2,10 +2,14 @@ import { Module, loading, delay, register, RouteInfo } from "../../../src";
 import { State } from "./state";
 import { TodoListDemo } from "./component";
 
+interface Query {
+    id: string;
+}
+
 class TodoList extends Module<State> {
     a = 0;
 
-    componentDidMount(info: RouteInfo) {
+    componentDidMount(info: RouteInfo<Query>) {
         console.log("组件加载", info);
     }
 
