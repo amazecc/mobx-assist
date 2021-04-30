@@ -1,3 +1,3 @@
 import React from "react";
 
-export const StoreContext = React.createContext<any>({});
+export const StoreContext = React.createContext<any>(null);

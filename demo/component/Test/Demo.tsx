@@ -5,7 +5,7 @@ import { State } from "./state";
 
 interface StateProps {
     todo: State;
-    num: number
+    num: number;
 }
 
 export interface DemoProps extends StateProps {
