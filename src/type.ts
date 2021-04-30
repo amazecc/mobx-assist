@@ -1,3 +1,6 @@
+/** 任意 key -> value 的对象 */
+export type AnyObject = Record<string, any>;
+
 // 提取指定类型的字段，生成联合类型
 export type PickTypeFields<T, P> = {
     [K in keyof T]: T[K] extends P ? K : never;
@@ -19,6 +22,3 @@ export type PickOptional<T> = Pick<T, { [K in keyof T]-?: {} extends { [P in K]:
 
 // 适用于编写高阶组件
 export type Subtract<T1, T2> = Omit<T1, keyof T2>;
-
-// 获取组件的props
-export type GetProps<T> = T extends React.ComponentType<infer P> ? P : never;

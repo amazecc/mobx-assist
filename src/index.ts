@@ -1,13 +1,14 @@
-export { Module, RouteInfo } from "./core/Module";
-export { register } from "./core/register";
+export { Module } from "./core/Module";
 export { useStore } from "./core/hook";
-export { loading, asyncDecoratorCreator, decoratorCreator } from "./utils/decorator";
-export { delay } from "./utils/common";
+export type { Store } from "./core/StoreManager";
+
+export { Loading, decoratorCreator } from "./utils/decorator";
+export { delay, loading } from "./utils/common";
 export { exceptionUtil } from "./utils/exceptionUtil";
-export { Store } from "./core/StoreManager";
+
 export { connect } from "./component/connect";
-export { Router, history } from "./component/Router";
 export { Provider } from "./component/Provider";
+export { attachLifecycle } from "./component/attachLifecycle";
 
 // export type utils
 export * from "./type";

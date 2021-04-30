@@ -1,13 +1,18 @@
-export interface Store {}
+import { observable } from "mobx";
+import { AnyObject } from "src/type";
+
+export interface Store {
+    "@@loading": AnyObject;
+}
 
 export class StoreManager {
-    private store: Store = Object.create(null);
+    private store = { "@@loading": observable({}) } as Store;
 
-    add(name: string, store: object) {
+    addStore(name: string, store: object) {
         this.store[name] = store;
     }
 
-    get() {
+    getStore() {
         return this.store;
     }
 }

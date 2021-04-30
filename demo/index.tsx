@@ -1,9 +1,10 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { configure } from "mobx";
-import { Route } from "react-router-dom";
+import { Route, Router } from "react-router-dom";
 import { TodoListDemoComponent } from "./component/Test";
-import { exceptionUtil, Provider, Router } from "../src";
+import { exceptionUtil, Provider } from "../src";
+import { history } from "./history";
 
 configure({ enforceActions: "observed" });
 
@@ -15,7 +16,7 @@ exceptionUtil.setErrorHandlerMethod(errorHandler);
 
 ReactDOM.render(
     <Provider>
-        <Router>
+        <Router history={history}>
             <Route path="/a/:name" component={TodoListDemoComponent} />
         </Router>
     </Provider>,

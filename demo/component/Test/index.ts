@@ -1,19 +1,15 @@
-import { Module, loading, delay, register, RouteInfo } from "../../../src";
+import { Module, Loading, delay, attachLifecycle } from "../../../src";
 import { State } from "./state";
 import { TodoListDemo } from "./component";
-
-interface Query {
-    id: string;
-}
 
 class TodoList extends Module<State> {
     a = 0;
 
-    componentDidMount(info: RouteInfo<Query>) {
-        console.log("组件加载", info);
+    onDidMount() {
+        console.log("组件加载");
     }
 
-    componentWillUnmount() {
+    onWillUnmount() {
         return ["loading" as const];
     }
 
@@ -21,7 +17,7 @@ class TodoList extends Module<State> {
         this.setState(state => state.list.push(++this.a), "push list");
     }
 
-    @loading<State>("loading")
+    @Loading<State>("loading")
     async add() {
         await delay(1000);
         const { num } = this.state;
@@ -34,6 +30,5 @@ class TodoList extends Module<State> {
     }
 }
 
-const module = register(new TodoList(State));
-export const todoListModule = module.getModule();
-export const TodoListDemoComponent = module.attachLifecycle(TodoListDemo);
+export const todoListModule = new TodoList(State);
+export const TodoListDemoComponent = attachLifecycle(todoListModule, TodoListDemo);

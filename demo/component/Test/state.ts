@@ -1,10 +1,13 @@
-import { observable, computed } from "mobx";
+import { makeAutoObservable } from "mobx";
 
 export class State {
-    @observable num: number = 0;
-    @observable list: number[] = [];
-    @observable loading: boolean = false;
-    @computed get listLength() {
+    num: number = 0;
+    list: number[] = [];
+    loading: boolean = false;
+    get listLength() {
         return this.list.length;
+    }
+    constructor() {
+        makeAutoObservable(this);
     }
 }

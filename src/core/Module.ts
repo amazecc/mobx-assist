@@ -1,25 +1,16 @@
 import { observable, toJS, action } from "mobx";
-import { RouteComponentProps } from "react-router-dom";
-import { LocationState } from "history";
+import { AnyObject } from "../type";
 import { storeManager } from "./StoreManager";
 
-export interface RouteInfo<Query = {}, Params = {}, State = LocationState> extends RouteComponentProps<Params, any, State> {
-    query: Query;
-}
-
-export interface Module<S extends AnyState = AnyState> {
-    componentDidMount?(routeInfo: RouteInfo): void;
+export interface Module<S extends AnyObject = AnyObject> {
+    onDidMount?(): void;
     /**
      * 组件卸载默认清除当前模块的数据，若要忽略一些数据，可返回一个数组，数组每项为当前模块 state key
      */
-    componentWillUnmount?(): void | (keyof S)[];
+    onWillUnmount?(): void | (keyof S)[];
 }
 
-interface AnyState {
-    [k: string]: any;
-}
-
-export class Module<S extends AnyState = AnyState> {
+export class Module<S extends AnyObject = AnyObject> {
     private readonly moduleName: string;
 
     private readonly initialState: S;
@@ -36,16 +27,12 @@ export class Module<S extends AnyState = AnyState> {
             this.initialState = toJS(store);
             this.state = store;
         }
-        storeManager.add(this.moduleName, this.state);
+        storeManager.addStore(this.moduleName, this.state);
     }
 
     protected setState<K extends keyof S>(value: Pick<S, K> | ((state: S) => void), actionName?: string) {
         const fn = typeof value === "function" ? () => value(this.state) : () => Object.keys(value).forEach(_ => (this.state[_ as keyof S] = value[_]));
-        if (actionName) {
-            action(actionName, fn)();
-        } else {
-            action(fn)();
-        }
+        return actionName ? action(actionName, fn)() : action(fn)();
     }
 
     public resetState(skipFields: (keyof S)[] = [], actionName?: string) {
@@ -59,6 +46,6 @@ export class Module<S extends AnyState = AnyState> {
     }
 
     protected get globalState() {
-        return storeManager.get();
+        return storeManager.getStore();
     }
 }
