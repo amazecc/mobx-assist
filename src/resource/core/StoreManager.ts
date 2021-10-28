@@ -1,5 +1,5 @@
 import { observable } from "mobx";
-import { AnyObject } from "src/type";
+import { AnyObject } from "../type";
 
 export interface Store {
     "@@loading": AnyObject;

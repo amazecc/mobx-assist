@@ -3,7 +3,7 @@ import "colors";
 
 function runShell(command: string) {
     const arrayCommand = command.split(" ");
-    const result = spawnSync(arrayCommand[0], arrayCommand.slice(1), {stdio: "inherit"});
+    const result = spawnSync(arrayCommand[0], arrayCommand.slice(1), { stdio: "inherit" });
     if (result.error) {
         console.error(result.error);
         process.exit(1);
@@ -25,21 +25,21 @@ function prettier() {
     runShell("prettier --config .prettierrc --write {src,test}/**/*.{ts,tsx}");
 }
 
-function tslint() {
-    console.log("[Task: tsLint]".green);
-    runShell("tslint --config tslint.json {src,test}/**/*.{ts,tsx}");
+function eslint() {
+    console.log("[Task: esLint]".green);
+    runShell(`eslint --fix src/**/*.{ts,tsx,json}`);
 }
 
 function checkTypescriptCode() {
     console.log("[Task: Check Code]".green);
-    runShell("tsc -p config/tsconfig.check.json");
+    runShell("tsc --noEmit");
 }
 
 function run() {
     add();
     prettier();
     checkTypescriptCode();
-    tslint();
+    eslint();
 }
 
 run();

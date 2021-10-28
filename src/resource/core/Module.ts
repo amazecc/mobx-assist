@@ -17,13 +17,13 @@ export class Module<S extends AnyObject = AnyObject> {
 
     public readonly state: S;
 
-    constructor(initialState: S | (new () => S)) {
-        this.moduleName = this.constructor.name;
-        if (typeof initialState === "object") {
-            this.initialState = { ...initialState };
-            this.state = observable(initialState, undefined, { name: this.moduleName });
+    constructor(moduleName: string, InitialState: S | (new () => S)) {
+        this.moduleName = moduleName;
+        if (typeof InitialState === "object") {
+            this.initialState = { ...InitialState };
+            this.state = observable(InitialState, undefined, { name: this.moduleName });
         } else {
-            const store = new initialState();
+            const store = new InitialState();
             this.initialState = toJS(store);
             this.state = store;
         }
@@ -37,7 +37,7 @@ export class Module<S extends AnyObject = AnyObject> {
 
     public resetState(skipFields: (keyof S)[] = [], actionName?: string) {
         const omitComputedFieldsStateKeys = Object.keys(toJS(this.state));
-        const keys = skipFields.length > 0 ? omitComputedFieldsStateKeys.filter(_ => !((skipFields as unknown) as string[]).includes(_)) : omitComputedFieldsStateKeys;
+        const keys = skipFields.length > 0 ? omitComputedFieldsStateKeys.filter(_ => !(skipFields as unknown as string[]).includes(_)) : omitComputedFieldsStateKeys;
         const finalState = keys.reduce((prev, next) => {
             prev[next] = this.initialState[next];
             return prev;
