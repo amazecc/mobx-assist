@@ -62,5 +62,17 @@
         "@babel/runtime-corejs3": "^7.15.4",
         "mobx": "^6.3.5",
         "mobx-react": "^7.2.1"
+    },
+    "browserslist": {
+        "production": [
+            ">0.2%",
+            "not dead",
+            "not op_mini all"
+        ],
+        "development": [
+            "last 1 chrome version",
+            "last 1 firefox version",
+            "last 1 safari version"
+        ]
     }
 }
