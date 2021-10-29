@@ -1,11 +1,11 @@
-import * as React from "react";
+import React from "react";
 import { observer } from "mobx-react";
-import { Store } from "../core/StoreManager";
 import { useSelector } from "../core/hook";
-import { Subtract } from "../type";
+import type { Subtract } from "../type";
+import type { GlobalState } from "../core/Store";
 
 export const connect =
-    <R extends {}>(mapStateToProps: (state: Store) => R) =>
+    <R extends {}>(mapStateToProps: (state: GlobalState) => R) =>
     <P extends R>(Component: React.ComponentType<P>): React.ComponentType<Subtract<P, R>> =>
         observer(props => {
             const store = useSelector(mapStateToProps);

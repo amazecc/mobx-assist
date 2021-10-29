@@ -1,8 +1,8 @@
 import { observable, toJS, action } from "mobx";
-import { AnyObject } from "../type";
-import { storeManager } from "./StoreManager";
+import { store } from "./Store";
+import type { AnyPlainObject } from "../type";
 
-export interface Module<S extends AnyObject = AnyObject> {
+export interface Module<S extends AnyPlainObject = AnyPlainObject> {
     onDidMount?(): void;
     /**
      * 组件卸载默认清除当前模块的数据，若要忽略一些数据，可返回一个数组，数组每项为当前模块 state key
@@ -10,7 +10,7 @@ export interface Module<S extends AnyObject = AnyObject> {
     onWillUnmount?(): void | (keyof S)[];
 }
 
-export class Module<S extends AnyObject = AnyObject> {
+export class Module<S extends AnyPlainObject = AnyPlainObject> {
     private readonly moduleName: string;
 
     private readonly initialState: S;
@@ -23,11 +23,11 @@ export class Module<S extends AnyObject = AnyObject> {
             this.initialState = { ...InitialState };
             this.state = observable(InitialState, undefined, { name: this.moduleName });
         } else {
-            const store = new InitialState();
-            this.initialState = toJS(store);
-            this.state = store;
+            const state = new InitialState();
+            this.initialState = toJS(state);
+            this.state = state;
         }
-        storeManager.addStore(this.moduleName, this.state);
+        store.addStore(this.moduleName, this.state);
     }
 
     protected setState<K extends keyof S>(value: Pick<S, K> | ((state: S) => void), actionName?: string) {
@@ -46,6 +46,6 @@ export class Module<S extends AnyObject = AnyObject> {
     }
 
     protected get globalState() {
-        return storeManager.getStore();
+        return store.getStore();
     }
 }

@@ -1,7 +1,7 @@
 import React from "react";
-import { Store } from "./StoreManager";
+import { GlobalState } from "./Store";
 import { StoreContext } from "./context";
 
-export function useSelector<R>(fn: (state: Store) => R) {
+export function useSelector<R>(fn: (state: GlobalState) => R) {
     return fn(React.useContext(StoreContext));
 }

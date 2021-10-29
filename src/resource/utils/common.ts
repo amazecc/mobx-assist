@@ -1,12 +1,18 @@
 import { runInAction } from "mobx";
-import { storeManager } from "../core/StoreManager";
+import { store } from "../core/Store";
 import type { Module } from "../core/Module";
 import { decoratorCreator } from "./decorator";
 
-export const delay = (d: number = 300) => new Promise(resolve => setTimeout(resolve, d));
+/**
+ * 等待时间，单位：ms
+ * @param duration
+ * @default 300
+ */
+export const delay = (duration = 300) => new Promise(resolve => setTimeout(resolve, duration));
 
+/** 自动 loading 方法 */
 export const loading = async <R>(field: string, fn: () => Promise<R>) => {
-    const loadingStore = storeManager.getStore()["@@loading"];
+    const loadingStore = store.getStore()["@@loading"];
     try {
         runInAction(() => {
             loadingStore[field] = true;
@@ -19,10 +25,10 @@ export const loading = async <R>(field: string, fn: () => Promise<R>) => {
     }
 };
 
-/** 装饰器 */
+/** 自动 loading 装饰器 */
 export function Loading(field: string) {
     return decoratorCreator(async fn => {
-        const loadingStore = storeManager.getStore()["@@loading"];
+        const loadingStore = store.getStore()["@@loading"];
         try {
             runInAction(() => {
                 loadingStore[field] = true;
@@ -36,6 +42,7 @@ export function Loading(field: string) {
     });
 }
 
+/** 为类方法提供安全 this 绑定 */
 export const bindThis = <T extends Module>(module: T): T => {
     return new Proxy(module, {
         get(target: T, p: string | symbol, receiver: any) {

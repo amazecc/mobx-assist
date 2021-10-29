@@ -1,10 +1,10 @@
 import React from "react";
 import { observer } from "mobx-react";
-import { attachLifecycle, connect, Store } from "../../resource";
+import { attachLifecycle, connect, GlobalState } from "../../resource";
 import { demoModule } from "./Module";
 
 interface DemoProps {
-    globalState: Store;
+    globalState: GlobalState;
 }
 
 @observer

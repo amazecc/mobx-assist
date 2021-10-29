@@ -1,5 +1,5 @@
-import * as React from "react";
-import { Module } from "../core/Module";
+import React from "react";
+import type { Module } from "../core/Module";
 
 export function attachLifecycle<M extends Module, P extends {}>(module: M, Component: React.ComponentType<P>): React.MemoExoticComponent<React.FunctionComponent<P>> {
     return React.memo((props: P) => {
